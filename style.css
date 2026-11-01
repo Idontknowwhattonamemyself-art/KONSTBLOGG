@@ -1,0 +1,174 @@
+/* ===== Färger som variabler, så de är lätta att ändra ===== */
+:root {
+  --bg: #e9ebe6;        /* ljus, sval grå som grundad duk */
+  --surface: #f6f7f4;   /* lite ljusare yta för formulär */
+  --text: #22261f;      /* mörk olivsvart */
+  --muted: #5f6558;     /* dämpad text, t.ex. datum */
+  --accent: #2c4a6b;    /* preussiskt blått, länkar och knappar */
+  --line: #c9cdc2;      /* tunna linjer */
+}
+
+/* Mörkt läge följer användarens inställning i telefonen/datorn */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #1b1e19;
+    --surface: #242820;
+    --text: #e4e6df;
+    --muted: #a3a99a;
+    --accent: #9cb8d8;
+    --line: #3a3f35;
+  }
+}
+
+/* ===== Grund ===== */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 18px;      /* lättläst textstorlek */
+  line-height: 1.6;
+}
+
+/* Begränsar bredden så raderna inte blir för långa att läsa */
+.wrap {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+h1, h2 {
+  font-family: "Spectral", Georgia, serif;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+a { color: var(--accent); }
+
+/* ===== Header ===== */
+.site-header { border-bottom: 1px solid var(--line); }
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.logo { margin: 0; font-size: 2rem; font-style: italic; font-weight: 400; }
+.logo a { color: var(--text); text-decoration: none; }
+
+.auth { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; }
+
+/* ===== Text ===== */
+.intro {
+  font-family: "Spectral", Georgia, serif;
+  font-size: 1.35rem;
+  margin: 8px 0 32px;
+}
+
+.weather { color: var(--muted); font-size: 0.95rem; margin-top: 24px; }
+.date { color: var(--muted); font-size: 0.9rem; margin-top: -8px; }
+.error { color: #a33a2a; }
+.empty { color: var(--muted); font-style: italic; }
+
+/* ===== Formulär ===== */
+label { display: block; margin-bottom: 16px; font-size: 0.95rem; }
+
+input, textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 10px 12px;
+  font: inherit;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+
+button {
+  font: inherit;
+  font-size: 0.95rem;
+  padding: 10px 18px;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+@media (prefers-color-scheme: dark) {
+  button { color: #1b1e19; }
+}
+
+/* En diskretare knapp som ser ut som en länk */
+.btn-quiet {
+  background: none;
+  color: var(--accent);
+  padding: 0;
+  text-decoration: underline;
+}
+
+/* Synlig markering när man navigerar med tangentbordet */
+button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 20px;
+  margin: 24px 0;
+}
+.panel h2 { margin-top: 0; font-size: 1.3rem; }
+
+.search { margin-bottom: 8px; }
+
+/* ===== Listan med inlägg ===== */
+.post-list { list-style: none; padding: 0; margin: 0; }
+
+.post-list li { border-top: 1px solid var(--line); padding: 20px 0; }
+
+.post-list button {
+  background: none;
+  color: var(--text);
+  padding: 0;
+  text-align: left;
+  font-family: "Spectral", Georgia, serif;
+  font-size: 1.5rem;
+  line-height: 1.25;
+}
+.post-list button:hover { color: var(--accent); }
+
+.post-list .excerpt { color: var(--muted); margin: 6px 0 0; }
+
+/* ===== Ett enskilt inlägg ===== */
+#post-view { margin-top: 24px; }
+#post-view h2 { font-size: 2.2rem; margin: 24px 0 8px; }
+
+.post-body {
+  font-family: "Spectral", Georgia, serif;
+  font-size: 1.15rem;
+  line-height: 1.75;
+}
+
+.site-footer {
+  margin-top: 64px;
+  padding-bottom: 32px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* ===== Mobil: mindre rubriker på smala skärmar ===== */
+@media (max-width: 500px) {
+  body { font-size: 17px; }
+  .logo { font-size: 1.6rem; }
+  #post-view h2 { font-size: 1.7rem; }
+  .post-list button { font-size: 1.3rem; }
+}
