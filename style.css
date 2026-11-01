@@ -1,7 +1,7 @@
 /* ===== Färger som variabler, så de är lätta att ändra ===== */
 :root {
-  --bg: #e9ebe6;        /* ljus, sval grå som grundad duk */
-  --surface: #f6f7f4;   /* lite ljusare yta för formulär */
+  --bg: #ffffff;        /* ljus, vit
+  --surface: #f7f7f7;   /* lite ljusare yta för formulär */
   --text: #22261f;      /* mörk olivsvart */
   --muted: #5f6558;     /* dämpad text, t.ex. datum */
   --accent: #2c4a6b;    /* preussiskt blått, länkar och knappar */
@@ -9,16 +9,7 @@
 }
 
 /* Mörkt läge följer användarens inställning i telefonen/datorn */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --bg: #1b1e19;
-    --surface: #242820;
-    --text: #e4e6df;
-    --muted: #a3a99a;
-    --accent: #9cb8d8;
-    --line: #3a3f35;
-  }
-}
+
 
 /* ===== Grund ===== */
 * { box-sizing: border-box; }
@@ -48,21 +39,42 @@ h1, h2 {
 a { color: var(--accent); }
 
 /* ===== Header ===== */
-.site-header { border-bottom: 1px solid var(--line); }
-
-.header-row {
+.site-header {
+  position: relative;          /* så att inloggningen kan placeras i hörnet */
+  min-height: 75vh;            /* headern tar 75 % av skärmens höjd */
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 16px;
-  padding-top: 16px;
-  padding-bottom: 16px;
+  align-items: center;         /* lodrätt i mitten */
+  background: #ffffff;
+  border-bottom: 1px solid var(--line);
 }
 
-.logo { margin: 0; font-size: 2rem; font-style: italic; font-weight: 400; }
+.header-row {
+  width: 100%;
+  max-width: none;             /* får gå över hela bredden */
+  display: flex;
+  justify-content: flex-end;   /* skjuter rubriken åt höger */
+  padding: 0 6vw;
+}
+
+.logo {
+  margin: 0;
+  font-family: "Abril Fatface", Georgia, serif;
+  font-weight: 400;
+  font-size: clamp(4rem, 16vw, 13rem);  /* växer och krymper med skärmen */
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
 .logo a { color: var(--text); text-decoration: none; }
 
-.auth { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; }
+.auth {
+  position: absolute;          /* lägger "Logga in" uppe i högra hörnet */
+  top: 20px;
+  right: 6vw;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 0.9rem;
+}
 
 /* ===== Text ===== */
 .intro {
@@ -102,9 +114,7 @@ button {
   cursor: pointer;
 }
 
-@media (prefers-color-scheme: dark) {
-  button { color: #1b1e19; }
-}
+
 
 /* En diskretare knapp som ser ut som en länk */
 .btn-quiet {
@@ -168,7 +178,7 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 /* ===== Mobil: mindre rubriker på smala skärmar ===== */
 @media (max-width: 500px) {
   body { font-size: 17px; }
-  .logo { font-size: 1.6rem; }
+
   #post-view h2 { font-size: 1.7rem; }
   .post-list button { font-size: 1.3rem; }
 }
