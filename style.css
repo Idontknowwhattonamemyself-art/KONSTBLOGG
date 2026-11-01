@@ -58,11 +58,12 @@ a { color: var(--accent); }
 
 .logo {
   margin: 0;
-  font-family: "Abril Fatface", Georgia, serif;
+  font-family: Impact, "Anton", "Arial Narrow", sans-serif;
   font-weight: 400;
+  text-transform: uppercase;            /* gör texten till versaler */
   font-size: clamp(4rem, 16vw, 13rem);  /* växer och krymper med skärmen */
-  line-height: 0.9;
-  letter-spacing: -0.02em;
+  line-height: 0.85;
+  letter-spacing: 0;
 }
 .logo a { color: var(--text); text-decoration: none; }
 
