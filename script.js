@@ -226,13 +226,16 @@ async function loadChristmasCountdown() {
     const deadline = new Date(christmasDate);
     deadline.setDate(deadline.getDate() - 14);
 
-    // Gör om datumet till text, t.ex. "11 December"
-    const deadlineText = deadline.toLocaleDateString("en-GB", { day: "numeric", month: "long" });
-
-    // Villkor: har sista dagen passerat?
+       // Räkna ut hur många dagar det är kvar till sista beställningsdag
     const today = new Date();
-    if (today < deadline) {
-      box.textContent = "Order before " + deadlineText + " to get your painting delivered before Christmas.";
+    const msPerDay = 1000 * 60 * 60 * 24;   // millisekunder per dag
+    const daysLeft = Math.ceil((deadline - today) / msPerDay);
+
+    // Villkor: flera dagar kvar, sista dagen, eller för sent?
+    if (daysLeft > 1) {
+      box.textContent = "Order within " + daysLeft + " days to get your painting before Christmas.";
+    } else if (daysLeft === 1) {
+      box.textContent = "Last day to order for delivery before Christmas!";
     } else {
       box.textContent = "Orders placed now will be delivered after Christmas.";
     }

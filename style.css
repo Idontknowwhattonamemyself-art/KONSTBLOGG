@@ -233,3 +233,70 @@ img {
   margin-left: auto;    /* centrerad */
   margin-right: auto;
 }
+/* ===== Rutnät med två verk per rad ===== */
+.post-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);  /* två lika breda kolumner */
+  gap: 32px 24px;                          /* luft mellan rader och kolumner */
+}
+
+.post-list li {
+  border-top: none;      /* tar bort linjen mellan inläggen */
+  padding: 0;
+}
+
+.post-list button {
+  font-size: clamp(1.2rem, 2.5vw, 1.6rem);  /* mindre rubriker i rutnätet */
+}
+
+.post-thumb {
+  width: 100%;
+  max-height: none;
+  aspect-ratio: 4 / 5;   /* alla bilder får samma format */
+  object-fit: cover;     /* beskärs i stället för att förvrängas */
+}
+
+/* På mobil: en kolumn */
+@media (max-width: 600px) {
+  .post-list {
+    grid-template-columns: 1fr;
+  }
+}
+/* ===== Rutnätet går över hela sidans bredd ===== */
+.post-list {
+  width: 100vw;                        /* hela fönstrets bredd */
+  margin-left: calc(50% - 50vw);       /* drar ut listan till vänsterkanten */
+  padding: 0 24px;                     /* lite luft mot kanterna */
+  row-gap: 0;
+}
+
+body {
+  overflow-x: hidden;                  /* förhindrar en vågrät scrollbar */
+}
+
+/* ===== Bilderna hamnar i linje oavsett rubrikens längd ===== */
+.post-list li {
+  display: grid;
+  grid-row: span 2;                    /* varje verk tar två rader: rubrik + bild */
+  grid-template-rows: subgrid;         /* raderna delas med grannen bredvid */
+}
+
+.post-list button {
+  align-self: end;                     /* rubriken placeras längst ner i sin rad */
+}
+
+.post-thumb {
+  margin-bottom: 48px;                 /* luft mellan raderna med verk */
+}
+
+
+/* ===== Sökfältet uppe till vänster i headern ===== */
+.header-search {
+  position: absolute;          /* samma knep som för "Log in" */
+  top: 14px;
+  left: 6vw;                   /* samma avstånd från kanten som "Log in" har till höger */
+  width: min(300px, 45vw);     /* aldrig bredare än 300px, smalare på mobil */
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+}
