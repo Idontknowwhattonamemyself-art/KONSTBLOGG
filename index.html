@@ -44,15 +44,16 @@
 
     <!-- VY 1: listan med alla inlägg -->
     <section id="list-view">
-      <p class="intro">Notes from the easel: portraits, colour and everyday life around painting.</p>
+   <p class="intro">Original oil portraits.</p>
 
-      <label class="search">Search posts
+<h2>STUDIO JOURNAL</h2>
+
+      <label class="search">SEARCH THE JOURNAL
         <input type="search" id="search" placeholder="For example “light”">
       </label>
 
       <!-- Formulär för nytt inlägg, visas bara för inloggade -->
       <form id="post-form" class="panel" hidden>
-        <h2>Write a new post</h2>
         <label>Title
           <input type="text" id="post-title" required>
         </label>
@@ -71,6 +72,7 @@
       <button id="back-button" class="btn-quiet">Back to all posts</button>
       <h2 id="post-view-title"></h2>
       <p id="post-view-date" class="date"></p>
+      <img id="post-view-image" class="post-image" alt="" hidden>sx
       <div id="post-view-text" class="post-body"></div>
     </article>
 

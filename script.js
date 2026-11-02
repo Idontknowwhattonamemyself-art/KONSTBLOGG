@@ -7,21 +7,24 @@
 let posts = [
   {
     id: 1,
-    title: "Why I paint faces",
-    date: "2026-10-12",
-    text: "A face changes all the time. A small shadow under the eye can make someone look tired or thoughtful. That is what I try to capture when I paint realistic portraits in oil."
+    title: "SHOP",
+    date: "2026-10-28",
+    image: "images/image1.jpg",
+    text: "Oil on linen, 50 × 60 cm. Painted over three weeks in the low autumn light. Price: 8 500 SEK. Use the commission form to ask about it."
   },
   {
     id: 2,
-    title: "Autumn light in the studio",
+    title: "COMMISSIONS SLOTS OPEN FOR DECEMBER",
     date: "2026-10-20",
-    text: "The November light in Stockholm is low and blue. I mostly paint in the mornings now, before it disappears. Cool light gives warm shadows, and you see it right away in the skin tones."
+    image: "images/image2.jpg",
+    text: "I'm taking three portrait commissions before Christmas. Send me a photo and an idea through the form, and I'll reply with a price and timeline."
   },
   {
     id: 3,
-    title: "Three colours I can't do without",
-    date: "2026-10-28",
-    text: "Titanium white, burnt umber and ultramarine. Those three take me a long way before I need to open another tube. A limited palette forces better decisions."
+    title: "HOW I MAKE MY PORTRAITS COME TOGETHER",
+    date: "2026-10-12",
+    image: "images/image3.jpg",
+    text: "Every portrait starts with a thin brown underpainting. Then I build up the light areas slowly, layer by layer, until the face feels alive."
   }
 ];
 
@@ -70,12 +73,20 @@ function renderList() {
       showPost(post.id);
     });
 
-    const excerpt = document.createElement("p");
-    excerpt.className = "excerpt";
-    excerpt.textContent = post.text.slice(0, 90) + "…"; // första 90 tecknen
+    // Visa bilden, men bara om inlägget har en bild
+     li.appendChild(titleButton);
+    if (post.image) {
+      const img = document.createElement("img");
+      img.src = post.image;
+      img.alt = post.title;
+      img.className = "post-thumb";
+      img.addEventListener("click", function () {
+        showPost(post.id); // även bilden öppnar inlägget
+      });
+      li.appendChild(img);
+    }
 
-    li.appendChild(titleButton);
-    li.appendChild(excerpt);
+   
     postList.appendChild(li);
   });
 
@@ -93,6 +104,15 @@ function showPost(id) {
   document.getElementById("post-view-title").textContent = post.title;
   document.getElementById("post-view-date").textContent = post.date;
   document.getElementById("post-view-text").textContent = post.text;
+
+  const postImage = document.getElementById("post-view-image");
+  if (post.image) {
+    postImage.src = post.image;
+    postImage.alt = post.title;
+    postImage.hidden = false;
+  } else {
+    postImage.hidden = true;
+  }
 
   listView.hidden = true;
   postView.hidden = false;

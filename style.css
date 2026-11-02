@@ -183,3 +183,43 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
   #post-view h2 { font-size: 1.7rem; }
   .post-list button { font-size: 1.3rem; }
 }
+/* ===== Centrera innehållet ===== */
+main, .site-footer {
+  text-align: center;          /* centrerar all text */
+}
+
+.post-list button {
+  text-align: center;          /* rubrikerna i listan */
+  width: 100%;
+}
+
+.post-thumb, .post-image {
+  margin-left: auto;           /* centrerar bilderna */
+  margin-right: auto;
+}
+
+.panel {
+  text-align: left;            /* formulären är lättare att fylla i vänsterställda */
+}
+
+/* ===== Bilder får aldrig bli bredare än spalten ===== */
+img {
+  display: block;
+  max-width: 100%;   /* aldrig bredare än spalten */
+  height: auto;      /* behåller proportionerna */
+  margin: 0 auto;    /* centrerar bilden */
+}
+/* ===== Rubriker i listan och i inlägget ===== */
+.post-list button,
+#post-view h2 {
+  font-family: Impact, "Anton", "Arial Narrow", sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);  /* mindre än headern, växer med skärmen */
+  line-height: 1;
+  letter-spacing: 0.01em;
+}
+
+.post-list button {
+  margin-bottom: 14px;   /* luft mellan rubrik och bild */
+}
