@@ -202,33 +202,50 @@ postForm.addEventListener("submit", function (event) {
 });
 
 // =====================================================
-// 8. EXTERNT API: väder i Stockholm från Open-Meteo
+// 8. EXTERNT API: nedräkning till jul
+// Hämtar Sveriges helgdagar från Nager.Date.
 // Ingen API-nyckel behövs.
 // =====================================================
-async function loadWeather() {
-  const url = "https://api.open-meteo.com/v1/forecast" +
-              "?latitude=59.33&longitude=18.07" +
-              "&current=temperature_2m,wind_speed_10m";
+async function loadChristmasCountdown() {
+  const year = new Date().getFullYear();   // årtalet just nu, t.ex. 2026
+  const url = "https://date.nager.at/api/v3/PublicHolidays/" + year + "/SE";
 
-  const weatherBox = document.getElementById("weather");
+  const box = document.getElementById("countdown");
 
   try {
-    const response = await fetch(url);      // skicka förfrågan
-    const data = await response.json();     // gör om svaret till ett JS-objekt
+    const response = await fetch(url);       // skicka förfrågan
+    const holidays = await response.json();  // svaret blir en lista med helgdagar
 
-    const temp = Math.round(data.current.temperature_2m);
-    const wind = Math.round(data.current.wind_speed_10m);
+    // find() letar upp juldagen (25 december) i listan
+    const christmas = holidays.find(function (holiday) {
+      return holiday.date.endsWith("-12-25");
+    });
 
-    weatherBox.textContent = "Stockholm right now: " + temp + " °C, wind " + wind + " km/h";
+  // Sista beställningsdag: 14 dagar före juldagen
+    const christmasDate = new Date(christmas.date);
+    const deadline = new Date(christmasDate);
+    deadline.setDate(deadline.getDate() - 14);
+
+    // Gör om datumet till text, t.ex. "11 December"
+    const deadlineText = deadline.toLocaleDateString("en-GB", { day: "numeric", month: "long" });
+
+    // Villkor: har sista dagen passerat?
+    const today = new Date();
+    if (today < deadline) {
+      box.textContent = "Order before " + deadlineText + " to get your painting delivered before Christmas.";
+    } else {
+      box.textContent = "Orders placed now will be delivered after Christmas.";
+    }
   } catch (error) {
-    weatherBox.textContent = "The weather could not be loaded. Check your internet connection and reload the page.";
+    box.textContent = "The Christmas countdown could not be loaded. Check your internet connection and reload the page.";
     console.error(error);
   }
 }
+  
 
 // =====================================================
 // 9. STARTA – körs när sidan laddas
 // =====================================================
 renderList();
 updateAuthUI();
-loadWeather();
+loadChristmasCountdown();
