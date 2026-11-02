@@ -7,21 +7,21 @@
 let posts = [
   {
     id: 1,
-    title: "Varför jag målar ansikten",
+    title: "Why I paint faces",
     date: "2026-10-12",
-    text: "Ett ansikte förändras hela tiden. En liten skugga under ögat kan göra någon trött eller eftertänksam. Det är det jag försöker fånga när jag målar realistiska porträtt i olja."
+    text: "A face changes all the time. A small shadow under the eye can make someone look tired or thoughtful. That is what I try to capture when I paint realistic portraits in oil."
   },
   {
     id: 2,
-    title: "Ljuset i ateljén på hösten",
+    title: "Autumn light in the studio",
     date: "2026-10-20",
-    text: "Novemberljuset i Stockholm är lågt och blått. Jag målar mest på förmiddagen nu, innan det försvinner. Kallt ljus ger varma skuggor, och det märks direkt på huden i porträtten."
+    text: "The November light in Stockholm is low and blue. I mostly paint in the mornings now, before it disappears. Cool light gives warm shadows, and you see it right away in the skin tones."
   },
   {
     id: 3,
-    title: "Tre färger jag aldrig klarar mig utan",
+    title: "Three colours I can't do without",
     date: "2026-10-28",
-    text: "Titanvitt, bränd umbra och ultramarin. Med de tre kommer jag långt innan jag ens behöver öppna fler tuber. Begränsad palett tvingar fram bättre beslut."
+    text: "Titanium white, burnt umber and ultramarine. Those three take me a long way before I need to open another tube. A limited palette forces better decisions."
   }
 ];
 
@@ -122,15 +122,15 @@ searchInput.addEventListener("input", renderList);
 function updateAuthUI() {
   if (loggedInUser) {
     // Inloggad: visa namn, "Logga ut" och formuläret för nya inlägg
-    userLabel.textContent = "Inloggad som " + loggedInUser;
+    userLabel.textContent = "Logged in as " + loggedInUser;
     userLabel.hidden = false;
-    loginToggle.textContent = "Logga ut";
+    loginToggle.textContent = "Log out";
     postForm.hidden = false;
     loginForm.hidden = true;
   } else {
     // Utloggad: dölj formuläret för nya inlägg
     userLabel.hidden = true;
-    loginToggle.textContent = "Logga in";
+    loginToggle.textContent = "Log in";
     postForm.hidden = true;
   }
 }
@@ -199,9 +199,9 @@ async function loadWeather() {
     const temp = Math.round(data.current.temperature_2m);
     const wind = Math.round(data.current.wind_speed_10m);
 
-    weatherBox.textContent = "Stockholm just nu: " + temp + " °C, vind " + wind + " km/h";
+    weatherBox.textContent = "Stockholm right now: " + temp + " °C, wind " + wind + " km/h";
   } catch (error) {
-    weatherBox.textContent = "Vädret kunde inte hämtas. Kontrollera internetanslutningen och ladda om sidan.";
+    weatherBox.textContent = "The weather could not be loaded. Check your internet connection and reload the page.";
     console.error(error);
   }
 }

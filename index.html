@@ -1,25 +1,25 @@
 <!DOCTYPE html>
-<html lang="sv">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <!-- Gör att sidan skalas rätt på mobil -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Ateljén – en blogg om porträttmåleri</title>
-<link href="https://fonts.googleapis.com/css2?family=Anton&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <title>In Print – a blog about portrait painting</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header class="site-header">
     <div class="wrap header-row">
-      <h1 class="logo"><a href="#" id="logo-link">IN PRINT</a></h1>
+      <h1 class="logo"><a href="#" id="logo-link">In Print</a></h1>
 
       <!-- Inloggning: knappen byter text beroende på om man är inloggad -->
       <div class="auth">
         <span id="user-label" hidden></span>
-        <button id="login-toggle" class="btn-quiet">Logga in</button>
+        <button id="login-toggle" class="btn-quiet">Log in</button>
       </div>
     </div>
   </header>
@@ -27,48 +27,48 @@
   <main class="wrap">
 
     <!-- Väder från externt API (Open-Meteo) -->
-    <p id="weather" class="weather">Hämtar vädret i Stockholm…</p>
+    <p id="weather" class="weather">Loading the weather in Stockholm…</p>
 
     <!-- Inloggningsformulär, dolt tills man klickar "Logga in" -->
     <form id="login-form" class="panel" hidden>
-      <h2>Logga in</h2>
-      <label>Användarnamn
+      <h2>Log in</h2>
+      <label>Username
         <input type="text" id="username" autocomplete="username" required>
       </label>
-      <label>Lösenord
+      <label>Password
         <input type="password" id="password" autocomplete="current-password" required>
       </label>
-      <p id="login-error" class="error" hidden>Fel användarnamn eller lösenord. Försök igen.</p>
-      <button type="submit">Logga in</button>
+      <p id="login-error" class="error" hidden>Wrong username or password. Try again.</p>
+      <button type="submit">Log in</button>
     </form>
 
     <!-- VY 1: listan med alla inlägg -->
     <section id="list-view">
-      <p class="intro">Anteckningar från staffliet: porträtt, färg och vardagen runt målandet.</p>
+      <p class="intro">Notes from the easel: portraits, colour and everyday life around painting.</p>
 
-      <label class="search">Sök bland inläggen
-        <input type="search" id="search" placeholder="Till exempel ”ljus”">
+      <label class="search">Search posts
+        <input type="search" id="search" placeholder="For example “light”">
       </label>
 
       <!-- Formulär för nytt inlägg, visas bara för inloggade -->
       <form id="post-form" class="panel" hidden>
-        <h2>Skriv ett nytt inlägg</h2>
-        <label>Rubrik
+        <h2>Write a new post</h2>
+        <label>Title
           <input type="text" id="post-title" required>
         </label>
         <label>Text
           <textarea id="post-text" rows="6" required></textarea>
         </label>
-        <button type="submit">Publicera</button>
+        <button type="submit">Publish</button>
       </form>
 
       <ul id="post-list" class="post-list"></ul>
-      <p id="no-results" class="empty" hidden>Inga inlägg matchar sökningen. Prova ett annat ord.</p>
+      <p id="no-results" class="empty" hidden>No posts match your search. Try another word.</p>
     </section>
 
     <!-- VY 2: ett enskilt inlägg -->
     <article id="post-view" hidden>
-      <button id="back-button" class="btn-quiet">Tillbaka till alla inlägg</button>
+      <button id="back-button" class="btn-quiet">Back to all posts</button>
       <h2 id="post-view-title"></h2>
       <p id="post-view-date" class="date"></p>
       <div id="post-view-text" class="post-body"></div>
@@ -77,7 +77,7 @@
   </main>
 
   <footer class="wrap site-footer">
-    <p>Byggd med HTML, CSS och JavaScript. Väderdata från Open-Meteo.</p>
+    <p>Built with HTML, CSS and JavaScript. Weather data from Open-Meteo.</p>
   </footer>
 
   <script src="script.js"></script>
