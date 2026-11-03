@@ -1,15 +1,23 @@
-/* ===== Färger som variabler, så de är lätta att ändra ===== */
+/* ===== Färger och mått som variabler, så de är lätta att ändra ===== */
 :root {
-  --bg: #ffffff;        /* ljus, vit
-  --surface: #f7f7f7;   /* lite ljusare yta för formulär */
+  --bg: #ffffff;        /* kritvit bakgrund */
+  --surface: #f7f7f7;   /* lite gråare yta för formulär */
   --text: #22261f;      /* mörk olivsvart */
   --muted: #5f6558;     /* dämpad text, t.ex. datum */
   --accent: #2c4a6b;    /* preussiskt blått, länkar och knappar */
   --line: #c9cdc2;      /* tunna linjer */
+
+  /* Galleriet */
+  --wall: #fbfbf8;        /* galleriväggarnas vita */
+  --wall-shade: #e9e7e1;  /* skuggan närmast oss på sidoväggarna */
+  --floor-near: #c9c2b6;  /* golvet nära oss */
+  --floor-far: #e6e2da;   /* golvet längst bort */
+  --frame: #1f1f1d;       /* ramarnas färg */
+  --depth: 600px;         /* hur djupt rummet är */
 }
 
-/* Mörkt läge följer användarens inställning i telefonen/datorn */
-
+/* Ser till att saker med "hidden" verkligen döljs */
+[hidden] { display: none !important; }
 
 /* ===== Grund ===== */
 * { box-sizing: border-box; }
@@ -21,6 +29,7 @@ body {
   font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
   font-size: 18px;      /* lättläst textstorlek */
   line-height: 1.6;
+  overflow-x: hidden;   /* förhindrar en vågrät scrollbar */
 }
 
 /* Begränsar bredden så raderna inte blir för långa att läsa */
@@ -40,17 +49,15 @@ a { color: var(--accent); }
 
 /* ===== Header ===== */
 .site-header {
-  position: relative;          /* så att inloggningen kan placeras i hörnet */
+  position: relative;          /* så att sök och inloggning kan placeras i hörnen */
   min-height: 75vh;            /* headern tar 75 % av skärmens höjd */
   display: flex;
   align-items: center;         /* lodrätt i mitten */
-  background: #ffffff;
   border-bottom: 1px solid var(--line);
 }
 
 .header-row {
   width: 100%;
-  max-width: none;             /* får gå över hela bredden */
   display: flex;
   justify-content: flex-end;   /* skjuter rubriken åt höger */
   padding: 0 6vw;
@@ -60,15 +67,14 @@ a { color: var(--accent); }
   margin: 0;
   font-family: Impact, "Anton", "Arial Narrow", sans-serif;
   font-weight: 400;
-  text-transform: uppercase;            /* gör texten till versaler */
+  text-transform: uppercase;
   font-size: clamp(4rem, 16vw, 13rem);  /* växer och krymper med skärmen */
   line-height: 0.85;
-  letter-spacing: 0;
 }
 .logo a { color: var(--text); text-decoration: none; }
 
 .auth {
-  position: absolute;          /* lägger "Logga in" uppe i högra hörnet */
+  position: absolute;          /* "Log in" uppe i högra hörnet */
   top: 20px;
   right: 6vw;
   display: flex;
@@ -77,17 +83,15 @@ a { color: var(--accent); }
   font-size: 0.9rem;
 }
 
-/* ===== Text ===== */
-.intro {
-  font-family: "Spectral", Georgia, serif;
-  font-size: 1.35rem;
-  margin: 8px 0 32px;
+.header-search {
+  position: absolute;          /* sökfältet uppe i vänstra hörnet */
+  top: 14px;
+  left: 6vw;
+  width: min(300px, 45vw);
+  margin: 0;
+  padding: 6px 12px;
+  font-size: 0.9rem;
 }
-
-.weather { color: var(--muted); font-size: 0.95rem; margin-top: 24px; }
-.date { color: var(--muted); font-size: 0.9rem; margin-top: -8px; }
-.error { color: #a33a2a; }
-.empty { color: var(--muted); font-style: italic; }
 
 /* ===== Formulär ===== */
 label { display: block; margin-bottom: 16px; font-size: 0.95rem; }
@@ -115,8 +119,6 @@ button {
   cursor: pointer;
 }
 
-
-
 /* En diskretare knapp som ser ut som en länk */
 .btn-quiet {
   background: none;
@@ -139,34 +141,232 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
 }
 .panel h2 { margin-top: 0; font-size: 1.3rem; }
 
-.search { margin-bottom: 8px; }
+.error { color: #a33a2a; }
+.thanks { margin: 16px 0 0; font-weight: 600; }
 
-/* ===== Listan med inlägg ===== */
-.post-list { list-style: none; padding: 0; margin: 0; }
+/* =====================================================
+   GALLERIET
+   Ett kvadratiskt rum i 3D. Scenen (.stage) har
+   "perspective", som gör att saker längre bort ser
+   mindre ut. Rummet har fyra väggar, ett golv och ett
+   tak, som vrids på plats med "transform".
+   Måtten ligger i variabler, så att mobilen kan få
+   ett annat rum (se längst ner):
+   --w     rummets bredd (varje vägg är lika bred)
+   --h     väggarnas höjd
+   --half  halva bredden, alltså avståndet från mitten till en vägg
+   --p     perspektivet: var våra ögon är
+   --z     hur nära oss rummet flyttas
+   ===================================================== */
+.gallery { padding: 24px 0 0; }
 
-.post-list li { border-top: 1px solid var(--line); padding: 20px 0; }
+/* Nedräkningen hänger som en banderoll ovanför rummet */
 
-.post-list button {
-  background: none;
-  color: var(--text);
-  padding: 0;
-  text-align: left;
-  font-family: "Spectral", Georgia, serif;
-  font-size: 1.5rem;
-  line-height: 1.25;
+.stage {
+  --w: 80vw;
+  --half: 40vw;
+  --p: 100vw;
+  --z: 40vw;
+  --h: 84vh;
+  position: relative;
+  height: 100vh;                 /* galleriet fyller hela skärmen */
+  perspective: var(--p);
+  overflow: hidden;
 }
-.post-list button:hover { color: var(--accent); }
 
-.post-list .excerpt { color: var(--muted); margin: 6px 0 0; }
+/* Rummet är en punkt mitt i scenen som allt annat hänger på */
+.room {
+  --turn: 0deg;                  /* hur mycket rummet är vridet, ändras av JavaScript */
+  position: absolute;
+  z-index: 0;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  transform-style: preserve-3d;  /* väggarna får ligga i samma 3D-rum */
+  transform: translateZ(var(--z)) rotateY(var(--turn));
+  transition: transform 0.9s ease-in-out;   /* mjuk vridning */
+  pointer-events: none;          /* rummet självt ska inte fånga klick... */
+}
 
-/* ===== Ett enskilt inlägg ===== */
-#post-view { margin-top: 24px; }
-#post-view h2 { font-size: 2.2rem; margin: 24px 0 8px; }
+/* Varje vägg: vriden 0, 90, 180 eller 270 grader och
+   sedan flyttad en halv rumsbredd bort från mitten */
+.wall {
+  position: absolute;
+  left: calc(-1 * var(--half));
+  top: calc(-0.5 * var(--h));
+  width: var(--w);
+  height: var(--h);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(ellipse at 50% 10%, #ffffff, var(--wall) 60%, var(--wall-shade));
+  transform: rotateY(var(--angle)) translateZ(calc(-1 * var(--half)));
+  backface-visibility: hidden;   /* väggen närmast oss syns inte, vi ser in i rummet */
+  pointer-events: auto;          /* ...men väggarna och målningarna ska det */
+}
+.wall-0 { --angle: 0deg; }
+.wall-1 { --angle: 90deg; }
+.wall-2 { --angle: 180deg; }
+.wall-3 { --angle: 270deg; }
+
+/* Golv och tak: kvadrater lika stora som rummet, fällda 90 grader */
+.floor, .ceiling {
+  position: absolute;
+  left: calc(-1 * var(--half));
+  top: calc(-1 * var(--half));
+  width: var(--w);
+  height: var(--w);
+}
+.floor {
+  background: radial-gradient(circle, var(--floor-far), var(--floor-near));
+  transform: translateY(calc(0.5 * var(--h))) rotateX(90deg);
+}
+.ceiling {
+  background: #f3f2ee;
+  transform: translateY(calc(-0.5 * var(--h))) rotateX(-90deg);
+}
+
+/* Den som har stängt av animationer får bytet direkt */
+@media (prefers-reduced-motion: reduce) {
+  .room { transition: none; }
+}
+
+/* ===== Målningar på väggarna ===== */
+.painting {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Ramen är en knapp, så att man kan klicka och använda tangentbordet */
+.frame {
+  display: block;
+  padding: 0.8em;                       /* den vita kartongen runt bilden */
+  background: #ffffff;
+  border: 0.35em solid var(--frame);
+  border-radius: 0;
+  box-shadow: 0 0.8em 1.6em rgba(0, 0, 0, 0.18);
+}
+
+.frame img {
+  display: block;
+  width: auto;
+  max-width: calc(var(--w) - 3em);   /* aldrig bredare än väggen */
+  height: calc(0.6 * var(--h));      /* målningen tar 60 % av väggens höjd */
+  object-fit: cover;
+}
+
+/* Om ett verk saknar bild visas en tom duk med titeln */
+.blank-canvas {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(0.48 * var(--h));
+  max-width: calc(var(--w) - 3em);
+  height: calc(0.6 * var(--h));
+  padding: 1em;
+  background: #ece6da;
+  color: var(--muted);
+  font-family: "Spectral", Georgia, serif;
+  font-style: italic;
+}
+
+/* Museiskylten under målningen: titel och pris */
+.plaque {
+  margin-top: 0.9em;
+  padding: 0.4em 0.9em;
+  max-width: min(18em, 60vw);
+  background: #ffffff;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  line-height: 1.2;
+}
+.plaque-title {
+  display: block;
+  font-family: Impact, "Anton", "Arial Narrow", sans-serif;
+  text-transform: uppercase;
+  font-size: 0.8em;
+  letter-spacing: 0.03em;
+}
+.plaque-price {
+  display: block;
+  margin-top: 0.2em;
+  color: var(--muted);
+  font-size: 0.75em;
+}
+
+.empty-note {
+  font-family: "Spectral", Georgia, serif;
+  font-style: italic;
+  color: var(--muted);
+  padding: 0 2em;
+  text-align: center;
+}
+
+/* ===== Pilarna på sidorna av rummet ===== */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 2;                    /* ovanpå rummet */
+  width: 56px;
+  height: 56px;
+  margin-top: -28px;
+  padding: 0;
+  border-radius: 50%;
+  background: var(--text);
+  font-size: 2rem;
+  line-height: 1;
+}
+.turn-left { left: 3vw; }
+.turn-right { right: 3vw; }
+.nav-arrow:disabled {
+  opacity: 0.25;
+  cursor: default;
+}
+
+
+
+
+/* ===== Ett enskilt verk och commissions-sidan ===== */
+.single-view {
+  padding-top: 40px;
+  text-align: center;
+}
+.single-view h2 {
+  margin: 24px 0 8px;
+  font-family: Impact, "Anton", "Arial Narrow", sans-serif;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  line-height: 1;
+}
+.single-view .panel { text-align: left; }
+
+.date { color: var(--muted); font-size: 0.9rem; }
+
+.price {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+#enquire-button { margin-top: 8px; }
+
+.post-image {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  max-height: 75vh;
+  margin: 16px auto 24px;
+}
 
 .post-body {
   font-family: "Spectral", Georgia, serif;
   font-size: 1.15rem;
   line-height: 1.75;
+  text-align: left;
 }
 
 .site-footer {
@@ -174,129 +374,99 @@ button:focus-visible, input:focus-visible, textarea:focus-visible, a:focus-visib
   padding-bottom: 32px;
   color: var(--muted);
   font-size: 0.85rem;
+  text-align: center;
 }
 
-/* ===== Mobil: mindre rubriker på smala skärmar ===== */
-@media (max-width: 500px) {
+/* ===== Mobil ===== */
+@media (max-width: 760px) {
   body { font-size: 17px; }
 
-  #post-view h2 { font-size: 1.7rem; }
-  .post-list button { font-size: 1.3rem; }
-}
-/* ===== Centrera innehållet ===== */
-main, .site-footer {
-  text-align: center;          /* centrerar all text */
+  /* Ett bredare rum, så att målningen syns ordentligt */
+  .stage {
+    --w: 84vw;
+    --half: 42vw;
+    --p: 105vw;
+    --z: 42vw;
+    --h: 70vh;
+    height: 82vh;
+  }
+
+  .nav-arrow {
+    width: 44px;
+    height: 44px;
+    margin-top: -22px;
+    font-size: 1.6rem;
+  }
 }
 
-.post-list button {
-  text-align: center;          /* rubrikerna i listan */
-  width: 100%;
+/* ===== Nedräkningen ===== */
+.countdown {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin: 0 20px 28px;
 }
 
-.post-thumb, .post-image {
-  margin-left: auto;           /* centrerar bilderna */
-  margin-right: auto;
-}
-
-.panel {
-  text-align: left;            /* formulären är lättare att fylla i vänsterställda */
-}
-
-/* ===== Bilder får aldrig bli bredare än spalten ===== */
-img {
-  display: block;
-  max-width: 100%;   /* aldrig bredare än spalten */
-  height: auto;      /* behåller proportionerna */
-  margin: 0 auto;    /* centrerar bilden */
-}
-/* ===== Rubriker i listan och i inlägget ===== */
-.post-list button,
-#post-view h2 {
-  font-family: Impact, "Anton", "Arial Narrow", sans-serif;
-  font-weight: 400;
-  text-transform: uppercase;
-  font-size: clamp(1.8rem, 5vw, 2.6rem);  /* mindre än headern, växer med skärmen */
-  line-height: 1;
+.countdown-text {
+  margin: 0;
+  text-align: center;
+  font-family: "Inter", system-ui, sans-serif;
+  font-weight: 300;            /* tunn text */
+  font-size: 1.05rem;
   letter-spacing: 0.01em;
 }
 
-.post-list button {
-  margin-bottom: 14px;   /* luft mellan rubrik och bild */
-}
-/* ===== Bilderna får plats på skärmen ===== */
-.post-thumb,
-.post-image {
-  width: auto;          /* bredden anpassas efter höjden */
-  max-width: 100%;      /* men aldrig bredare än spalten */
-  max-height: 75vh;     /* högst 75 % av skärmens höjd */
-  aspect-ratio: auto;   /* behåll bildens egna proportioner */
-  margin-left: auto;    /* centrerad */
-  margin-right: auto;
-}
-/* ===== Rutnät med två verk per rad ===== */
-.post-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);  /* två lika breda kolumner */
-  gap: 32px 24px;                          /* luft mellan rader och kolumner */
+/* Antalet dagar i fet stil */
+.countdown-text strong {
+  font-weight: 600;
 }
 
-.post-list li {
-  border-top: none;      /* tar bort linjen mellan inläggen */
-  padding: 0;
+/* ===== Bildspel bakom rubriken ===== */
+.site-header {
+  overflow: hidden;              /* bilderna får inte sticka ut */
 }
 
-.post-list button {
-  font-size: clamp(1.2rem, 2.5vw, 1.6rem);  /* mindre rubriker i rutnätet */
+.slideshow {
+  position: absolute;
+  inset: 0;                      /* fyller hela headern */
+  z-index: 0;                    /* längst bak */
 }
 
-.post-thumb {
+.slide {
+  position: absolute;
+  inset: 0;
   width: 100%;
-  max-height: none;
-  aspect-ratio: 4 / 5;   /* alla bilder får samma format */
-  object-fit: cover;     /* beskärs i stället för att förvrängas */
+  height: 100%;
+  object-fit: cover;             /* fyller rutan utan att förvrängas */
+  opacity: 0;                    /* alla bilder är osynliga... */
+  transition: opacity 1.2s ease-in-out;   /* ...och tonar mjukt */
 }
 
-/* På mobil: en kolumn */
-@media (max-width: 600px) {
-  .post-list {
-    grid-template-columns: 1fr;
-  }
-}
-/* ===== Rutnätet går över hela sidans bredd ===== */
-.post-list {
-  width: 100vw;                        /* hela fönstrets bredd */
-  margin-left: calc(50% - 50vw);       /* drar ut listan till vänsterkanten */
-  padding: 0 24px;                     /* lite luft mot kanterna */
-  row-gap: 0;
+.slide.active {
+  opacity: 1;                    /* ...utom den som har klassen "active" */
 }
 
-body {
-  overflow-x: hidden;                  /* förhindrar en vågrät scrollbar */
+/* En mörk hinna över bilderna, så att den vita texten syns */
+.slideshow::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
 }
 
-/* ===== Bilderna hamnar i linje oavsett rubrikens längd ===== */
-.post-list li {
-  display: grid;
-  grid-row: span 2;                    /* varje verk tar två rader: rubrik + bild */
-  grid-template-rows: subgrid;         /* raderna delas med grannen bredvid */
+/* Rubriken, sökfältet och inloggningen ligger ovanpå bilderna */
+.logo {
+  position: relative;
+  z-index: 1;
+}
+.auth, .header-search {
+  z-index: 1;
 }
 
-.post-list button {
-  align-self: end;                     /* rubriken placeras längst ner i sin rad */
-}
-
-.post-thumb {
-  margin-bottom: 48px;                 /* luft mellan raderna med verk */
-}
-
-
-/* ===== Sökfältet uppe till vänster i headern ===== */
-.header-search {
-  position: absolute;          /* samma knep som för "Log in" */
-  top: 14px;
-  left: 6vw;                   /* samma avstånd från kanten som "Log in" har till höger */
-  width: min(300px, 45vw);     /* aldrig bredare än 300px, smalare på mobil */
-  margin: 0;
-  padding: 6px 12px;
-  font-size: 0.9rem;
+/* Vit text, så att den syns mot bilderna */
+.logo a,
+.auth,
+.auth .btn-quiet {
+  color: #ffffff;
 }

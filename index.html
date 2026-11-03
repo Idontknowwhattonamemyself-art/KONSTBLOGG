@@ -4,20 +4,31 @@
   <meta charset="UTF-8">
   <!-- Gör att sidan skalas rätt på mobil -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>In Print – a blog about portrait painting</title>
+  <title>In Print – original oil portraits</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@200;300;600&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header class="site-header">
-    <div class="wrap header-row">
+    <!-- Bildspel bakom rubriken. aria-hidden: skärmläsare hoppar över det -->
+    <div class="slideshow" aria-hidden="true">
+      <img src="images/header1.jpg" alt="" class="slide active">
+      <img src="images/header2.jpg" alt="" class="slide">
+      <img src="images/header3.jpg" alt="" class="slide">
+      <img src="images/header4.jpg" alt="" class="slide">
+      <img src="images/header5.jpg" alt="" class="slide">
+    </div>
+
+    <div class="header-row">
       <h1 class="logo"><a href="#" id="logo-link">In Print</a></h1>
 
-      <!-- Inloggning: knappen byter text beroende på om man är inloggad -->
-     <input type="search" id="search" class="header-search" placeholder="Search the journal" aria-label="Search the journal">
+      <!-- Sökfält uppe till vänster -->
+      <input type="search" id="search" class="header-search" placeholder="Find a work" aria-label="Find a work">
+
+      <!-- Inloggning uppe till höger: knappen byter text beroende på om man är inloggad -->
       <div class="auth">
         <span id="user-label" hidden></span>
         <button id="login-toggle" class="btn-quiet">Log in</button>
@@ -25,61 +36,107 @@
     </div>
   </header>
 
-  <main class="wrap">
+  <main>
 
-    <!-- Väder från externt API (Open-Meteo) -->
-    <p id="countdown" class="weather">Counting down to Christmas…</p>
-
-    <!-- Inloggningsformulär, dolt tills man klickar "Logga in" -->
-    <form id="login-form" class="panel" hidden>
-      <h2>Log in</h2>
-      <label>Username
-        <input type="text" id="username" autocomplete="username" required>
-      </label>
-      <label>Password
-        <input type="password" id="password" autocomplete="current-password" required>
-      </label>
-      <p id="login-error" class="error" hidden>Wrong username or password. Try again.</p>
-      <button type="submit">Log in</button>
-    </form>
-
-    <!-- VY 1: listan med alla inlägg -->
-    <section id="list-view">
-   <p class="intro">Original oil portraits.</p>
-
-<h2>STUDIO JOURNAL</h2>
-
- 
-
-      <!-- Formulär för nytt inlägg, visas bara för inloggade -->
-      <form id="post-form" class="panel" hidden>
-        <label>Title
-          <input type="text" id="post-title" required>
+    <!-- Inloggningsformulär, dolt tills man klickar "Log in" -->
+    <div class="wrap">
+      <form id="login-form" class="panel" hidden>
+        <h2>Log in</h2>
+        <label>Username
+          <input type="text" id="username" autocomplete="username" required>
         </label>
-        <label>Text
-          <textarea id="post-text" rows="6" required></textarea>
+        <label>Password
+          <input type="password" id="password" autocomplete="current-password" required>
         </label>
-        <button type="submit">Publish</button>
+        <p id="login-error" class="error" hidden>Wrong username or password. Try again.</p>
+        <button type="submit">Log in</button>
       </form>
+    </div>
 
-      <ul id="post-list" class="post-list"></ul>
-      <p id="no-results" class="empty" hidden>No posts match your search. Try another word.</p>
+    <!-- ================================================
+         VY 1: GALLERIET
+         Ett kvadratiskt rum med fyra väggar. Vi står i
+         mitten, och pilarna vrider rummet så att nästa
+         vägg hamnar framför oss. Varje vägg har ett verk.
+         ================================================ -->
+    <section id="list-view" class="gallery" aria-label="Gallery">
+
+      <!-- Externt API: nedräkning till sista beställningsdag -->
+      <div class="countdown">
+        <p id="countdown" class="countdown-text">Counting down to Christmas…</p>
+      </div>
+
+      <div class="stage">
+        <div class="room" id="room">
+          <div class="floor"></div>
+          <div class="ceiling"></div>
+          <div class="wall wall-0"></div>
+          <div class="wall wall-1"></div>
+          <div class="wall wall-2"></div>
+          <div class="wall wall-3"></div>
+        </div>
+
+        <!-- Pilar för att vrida sig i rummet -->
+        <button id="turn-left" class="nav-arrow turn-left" aria-label="Turn left">‹</button>
+        <button id="turn-right" class="nav-arrow turn-right" aria-label="Turn right">›</button>
+      </div>
+
+
+      <!-- Formulär för nytt verk, visas bara för inloggade -->
+      <div class="wrap">
+        <form id="post-form" class="panel" hidden>
+          <h2>Hang a new work</h2>
+          <label>Title
+            <input type="text" id="post-title" required>
+          </label>
+          <label>Price
+            <input type="text" id="post-price" placeholder="For example 8 500 SEK">
+          </label>
+          <label>Image
+            <input type="file" id="post-image" accept="image/*">
+          </label>
+          <label>Text
+            <textarea id="post-text" rows="5" required></textarea>
+          </label>
+          <button type="submit">Hang it in the gallery</button>
+        </form>
+      </div>
     </section>
 
-    <!-- VY 2: ett enskilt inlägg -->
-    <article id="post-view" hidden>
-      <button id="back-button" class="btn-quiet">Back to all posts</button>
+    <!-- VY 2: ett enskilt verk -->
+    <article id="post-view" class="wrap single-view" hidden>
+      <button id="back-button" class="btn-quiet">Back to the gallery</button>
       <h2 id="post-view-title"></h2>
-      <p id="post-view-date" class="date"></p>
-      <img id="post-view-image" class="post-image" alt="" hidden>sx
+      <p id="post-view-price" class="price"></p>
+      <img id="post-view-image" class="post-image" alt="" hidden>
       <div id="post-view-text" class="post-body"></div>
+      <p id="post-view-date" class="date"></p>
+      <button id="enquire-button">Enquire about this work</button>
     </article>
+
+    <!-- VY 3: förfrågningar och commissions, öppet för alla besökare -->
+    <section id="commission-view" class="wrap single-view" hidden>
+      <button id="commission-back" class="btn-quiet">Back to the gallery</button>
+      <h2>Enquiries and commissions</h2>
+      <form id="commission-form" class="panel">
+        <p>Ask about a painting, or tell me who you'd like painted, and I'll reply with a price and timeline.</p>
+        <label>Name
+          <input type="text" id="c-name" required>
+        </label>
+        <label>Email
+          <input type="email" id="c-email" required>
+        </label>
+        <label>Message
+          <textarea id="c-message" rows="5" required></textarea>
+        </label>
+        <button type="submit">Send enquiry</button>
+        <p id="c-thanks" class="thanks" hidden></p>
+      </form>
+    </section>
 
   </main>
 
-  <footer class="wrap site-footer">
-    <p>Built with HTML, CSS and JavaScript. Weather data from Open-Meteo.</p>
-  </footer>
+ 
 
   <script src="script.js"></script>
 </body>
