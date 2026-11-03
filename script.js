@@ -379,7 +379,10 @@ async function loadChristmasCountdown() {
 
     // Villkor: flera dagar kvar, sista dagen, eller för sent?
     if (daysLeft > 1) {
-      box.textContent = "Order within " + daysLeft + " days to get your painting before Christmas.";
+      // <strong> gör antalet dagar fetstilt. innerHTML behövs för att
+      // <strong> ska bli fet stil och inte visas som text. Det är säkert
+      // här, eftersom daysLeft är en siffra vi räknat ut själva.
+      box.innerHTML = "Order within <strong>" + daysLeft + " days</strong> to get your painting before Christmas.";
     } else if (daysLeft === 1) {
       box.textContent = "Last day to order for delivery before Christmas!";
     } else {
@@ -416,7 +419,6 @@ buildWorks();
 hangWorks();
 updateAuthUI();
 loadChristmasCountdown();
-
 
 // =====================================================
 // 13. BILDSPEL I HEADERN

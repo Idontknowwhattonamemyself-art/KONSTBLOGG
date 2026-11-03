@@ -7,13 +7,13 @@
   <title>In Print – original oil portraits</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@200;300;600&family=Spectral:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <header class="site-header">
-       <!-- Bildspel bakom rubriken. aria-hidden: skärmläsare hoppar över det -->
+    <!-- Bildspel bakom rubriken. aria-hidden: skärmläsare hoppar över det -->
     <div class="slideshow" aria-hidden="true">
       <img src="images/header1.jpg" alt="" class="slide active">
       <img src="images/header2.jpg" alt="" class="slide">
@@ -21,6 +21,7 @@
       <img src="images/header4.jpg" alt="" class="slide">
       <img src="images/header5.jpg" alt="" class="slide">
     </div>
+
     <div class="header-row">
       <h1 class="logo"><a href="#" id="logo-link">In Print</a></h1>
 
@@ -61,7 +62,9 @@
     <section id="list-view" class="gallery" aria-label="Gallery">
 
       <!-- Externt API: nedräkning till sista beställningsdag -->
-      <p id="countdown" class="countdown">Counting down to Christmas…</p>
+      <div class="countdown">
+        <p id="countdown" class="countdown-text">Counting down to Christmas…</p>
+      </div>
 
       <div class="stage">
         <div class="room" id="room">
@@ -133,9 +136,7 @@
 
   </main>
 
-  <footer class="wrap site-footer">
-    <p>Built with HTML, CSS and JavaScript. Holiday data from Nager.Date.</p>
-  </footer>
+ 
 
   <script src="script.js"></script>
 </body>
